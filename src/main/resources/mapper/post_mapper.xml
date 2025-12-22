@@ -10,6 +10,9 @@
         <result property="visibility" column="visibility" />
         <result property="userId" column="pt_user_id" />
         <result property="createdAt" column="created_at" />
+        <association property="user" resultMap="userResultMap" />
+        <association property="follow" resultMap="followResultMap" />
+        <collection property="imageFiles" resultMap="imageFileResultMap" />
     </resultMap>
     <resultMap id="userResultMap" type="User">
         <id property="userId" column="user_id" />
@@ -17,10 +20,13 @@
         <result property="imgUrl" column="img_url" />
     </resultMap>
     <resultMap id="imageFileResultMap" type="ImageFile">
-
+        <id property="imageFileId" column="image_file_id"/>
+        <result property="filePath" column="file_path"/>
     </resultMap>
     <resultMap id="followResultMap" type="Follow">
-
+        <id property="followId" column="follow_id"/>
+        <result property="followerId" column="follower_id"/>
+        <result property="followingId" column="following_id"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="postId">
@@ -49,13 +55,22 @@
             left outer join user_tb ut on ut.user_id = pt.user_id
             left outer join follow_tb ft on ft.following_id = pt.user_id
         where
-            ft.follower_id = 1
-        limit 10, 10)
+            ft.follower_id = #{userId}
+        limit #{startIndex}, #{size})
 
         select
             *
         from
             temp_post_tb tpt
             left outer join image_file_tb ift on ift.reference_id = tpt.post_id and ift.category = 'post'
+    </select>
+    <select id="getTotalCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            post_tb pt
+            left outer join follow_tb ft on ft.following_id = pt.user_id
+        where
+            ft.follower_id = #{userId}
     </select>
 </mapper>
