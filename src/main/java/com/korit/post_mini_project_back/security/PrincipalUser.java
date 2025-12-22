@@ -4,8 +4,10 @@ import com.korit.post_mini_project_back.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -22,4 +24,20 @@ public class PrincipalUser extends DefaultOAuth2User {
         super(authorities, attributes, nameAttributeKey);
         this.user = user;
     }
+
+    public static PrincipalUser getAuthenticatedPrincipalUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        PrincipalUser principalUser = (PrincipalUser) authentication.getPrincipal();
+        return principalUser;
+    }
 }
+
+
+
+
+
+
+
+
+
+
