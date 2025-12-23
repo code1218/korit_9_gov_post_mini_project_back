@@ -56,6 +56,7 @@
             left outer join follow_tb ft on ft.following_id = pt.user_id
         where
             ft.follower_id = #{userId}
+            or pt.user_id = #{userId}
         order by
             pt.created_at desc
         limit #{startIndex}, #{size})
