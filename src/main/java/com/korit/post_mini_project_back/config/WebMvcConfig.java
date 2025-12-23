@@ -12,6 +12,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 @Configuration
+
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${user.dir}")
