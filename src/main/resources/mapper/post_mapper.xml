@@ -83,6 +83,7 @@
             left outer join follow_tb ft on ft.following_id = pt.user_id and ft.follower_id = #{userId}
         where
             ft.follower_id is null
+            and pt.visibility = 'Public'
         order by
             rand(),
             created_at desc
